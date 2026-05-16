@@ -1,0 +1,30 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
+
+class CheckAdmin
+{
+    /**
+     * Handle an incoming request.
+     *
+     * @param  Closure(Request): (Response)  $next
+     */
+    public function handle(Request $request, Closure $next): Response
+    {
+        $user = Auth::user();
+        if($user->role == 'user'){
+            return response()->json([
+                'success'=> false, 
+                "message"=> "Only admin can create course."
+            ]);
+        }
+        return $next($request); // jun request ma aako xa teta tira janey. 
+        // jaba certain condition meet hunxa vaney taba matra jana diney. 
+        
+    }
+}

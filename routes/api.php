@@ -11,10 +11,25 @@ Route::get('/user', function (Request $request) {
 
 
 // Course routes
-Route::post('/course/store', [CourseController::class, 'store']);
-Route::get('/course/index', [CourseController::class, 'index']);
-Route::patch('/course/update/{id}', [CourseController::class, 'update']);
-Route::delete('course/delete/{id}', [CourseController::class, 'delete']);
+// Route::get('/course/index', [CourseController::class, 'index'])->middleware('auth:sanctum');
+// Route::post('/course/store', [CourseController::class, 'store'])->middleware(['auth:sanctum', 'admin']);
+// Route::patch('/course/update/{id}', [CourseController::class, 'update'])->middleware(['auth:sanctum', 'admin']);
+// Route::delete('course/delete/{id}', [CourseController::class, 'delete'])->middleware(['auth:sanctum', 'admin']);
+
+
+// For loggedIn user
+    Route::middleware('auth:sanctum')->group(function(){
+        Route::get('/course/index', [CourseController::class, 'index']);
+    });
+
+
+// admin ley chalauney route lai group gareko because harek route ma hamiley middlewre raknu parxa
+Route::middleware(['auth:sanctum', 'admin'])->group(function(){
+    Route::post('/course/store', [CourseController::class, 'store']);
+    Route::patch('/course/update/{id}', [CourseController::class, 'update']);
+    Route::delete('course/delete/{id}', [CourseController::class, 'delete']);
+});
+
 
 // Auth routes
 Route::post('/register', [AuthController::class, 'register']);
