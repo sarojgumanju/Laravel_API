@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CourseController;
+use App\Http\Controllers\Api\EnrollmentController;
+use App\Models\Enrollment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,11 +22,14 @@ Route::get('/user', function (Request $request) {
 // For loggedIn user
     Route::middleware('auth:sanctum')->group(function(){
         Route::get('/course/index', [CourseController::class, 'index']);
+        Route::post('/enrollment/store', [EnrollmentController::class, 'store']);
     });
 
 
 // admin ley chalauney route lai group gareko because harek route ma hamiley middlewre raknu parxa
 Route::middleware(['auth:sanctum', 'admin'])->group(function(){
+    Route::get('/enrollment/index', [EnrollmentController::class, 'index']); 
+    Route::delete('/enrollment/delete/{id}', [EnrollmentController::class, 'delete']);
     Route::post('/course/store', [CourseController::class, 'store']);
     Route::patch('/course/update/{id}', [CourseController::class, 'update']);
     Route::delete('course/delete/{id}', [CourseController::class, 'delete']);
